@@ -1,5 +1,5 @@
 import express from 'express';
-import __dirname from './utils/pathUtils.js';
+import { __dirname } from '../utils/pathUtils.js';
 import fs from 'fs';
 import helmet from 'helmet';
 import compression from 'compression';
