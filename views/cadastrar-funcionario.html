@@ -32,19 +32,19 @@
 
     <section class="conteudo-cadastro">
         <section class="conteudo-formulario-cadastro">
-            <form method="POST" action="">
+            <form method="POST" action="/funcionarios" enctype="multipart/form-data">
                 <label>Cadastrar Funcionário</label>
-                <input type="text" placeholder="Nome" name="inputNomeFunc">
-                <input type="text" placeholder="Sobrenome" name="inputSobrenomeFunc">
-                <input type="text" placeholder="CPF" name="inputCPFFunc">
-                <input type="date" placeholder="Data Nascimento" name="inputDataNascFunc">
-                <input type="text" placeholder="Telefone" name="inputTelefoneFunc">
-                <input type="text" placeholder="Cargo / Função" name="inputCargoFunc">
-                <input type="text" placeholder="Salário" name="inputSalarioFunc">
-                <input type="text" placeholder="Email" name="inputEmailFunc">
-                <input type="password" placeholder="Senha" name="inputSenha">
+                <input type="text" placeholder="Nome" name="nome" required>
+                <input type="text" placeholder="Sobrenome" name="sobrenome" required>
+                <input type="text" placeholder="CPF" name="cpf" required>
+                <input type="date" placeholder="Data Nascimento" name="dataNascimento" required>
+                <input type="text" placeholder="Telefone" name="telefone" required>
+                <input type="text" placeholder="Cargo / Função" name="cargo" required>
+                <input type="number" placeholder="Salário" name="salario" min="0" step="0.01" required>
+                <input type="email" placeholder="Email" name="email" required>
+                <input type="password" placeholder="Senha" name="senha" required>
                 <label id="lbl-arquivo" for="files">Selecionar foto de perfil:</label>
-                <input type="file" name="inputFoto">
+                <input id="files" type="file" name="imagem" accept="image/jpeg,image/png,image/webp">
                 <input id="botao" type="submit" value="Cadastrar">
             </form>
         </section>

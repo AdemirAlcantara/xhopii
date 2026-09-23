@@ -35,9 +35,12 @@
             <h1>Clientes</h1>
             <% clientes.forEach(cliente => { %>
                 <section class="conteudo-bloco">
+                    <% if (cliente.imagem) { %>
+                        <img src="<%= cliente.imagem %>" alt="Foto de perfil de <%= cliente.nome %>">
+                    <% } %>
                     <h2><%= cliente.nome %> <%= cliente.sobrenome %></h2>
                     <p>CPF: <%= cliente.cpf %></p>
-                    <p>Data Nascimento: <%= cliente.dataNascimento %></p>
+                    <p>Data de Nascimento: <%= cliente.dataNascimento %></p>
                     <p>Telefone: <%= cliente.telefone %></p>
                     <p>E-mail: <%= cliente.email %></p>
                 </section>

@@ -1,12 +1,19 @@
-import ClienteModel from '../models/Cliente.js';
+import Cliente from '../models/Cliente.js';
+import { viewsPath } from '../utils/pathUtils.js';
+import path from 'path';
+import fs from 'fs/promises';
 
 class ClienteController {
 
     static async getAll(req, res) {
         try {
             // Oculta o campo de senha no retorno da lista por segurança
-            const clientes = await ClienteModel.find().select('-senha');
-            return res.status(200).json(clientes);
+            const clientes = await Cliente.findAll();
+            return res.status(200).json(clientes.map(cliente => {
+                const retorno = cliente.toObject();
+                delete retorno.senha;
+                return retorno;
+            }));
         } catch (error) {
             console.error('Erro ao buscar clientes:', error);
             return res.status(500).json({ message: 'Erro interno ao buscar clientes' });
@@ -16,12 +23,15 @@ class ClienteController {
     static async getById(req, res) {
         try {
             const { id } = req.params;
-            const cliente = await ClienteModel.findById(id).select('-senha');
+            const cliente = await Cliente.findById(id);
 
             if (!cliente) {
                 return res.status(404).json({ message: 'Cliente não encontrado' });
             }
-            return res.status(200).json(cliente);
+
+            const clienteRetorno = cliente.toObject();
+            delete clienteRetorno.senha;
+            return res.status(200).json(clienteRetorno);
         } catch (error) {
             console.error('Erro ao buscar cliente:', error);
             return res.status(500).json({ message: 'Erro interno ao buscar o cliente' });
@@ -30,25 +40,27 @@ class ClienteController {
 
     static async create(req, res) {
         try {
-            const { nome, email, senha } = req.body;
+            const { nome, sobrenome, cpf, dataNascimento, telefone, email, senha } = req.body;
+            const imagem = req.file ? `/uploads/perfis/${req.file.filename}` : null;
 
-            if (!nome || !email || !senha) {
-                return res.status(400).json({ message: 'Nome, e-mail e senha são obrigatórios' });
+            if (!nome || !sobrenome || !cpf || !dataNascimento || !telefone || !email || !senha) {
+                return res.status(400).json({ message: 'Nome, sobrenome, CPF, data de nascimento, telefone, e-mail e senha são obrigatórios' });
             }
 
-            const clienteExistente = await ClienteModel.findOne({ email });
+            const clienteExistente = await Cliente.findByEmail(email);
             if (clienteExistente) {
                 return res.status(409).json({ message: 'Já existe um cliente cadastrado com este e-mail' });
             }
 
-            const novoCliente = new ClienteModel({ nome, email, senha });
-            await novoCliente.save();
+            const novoCliente = new Cliente({ nome, sobrenome, cpf, dataNascimento, telefone, email, senha, imagem });
+            const clienteSalvo = await novoCliente.save();
 
-            const clienteRetorno = novoCliente.toObject();
+            const clienteRetorno = clienteSalvo.toObject();
             delete clienteRetorno.senha;
 
             return res.status(201).json(clienteRetorno);
         } catch (error) {
+            if (req.file) await fs.unlink(req.file.path).catch(() => {});
             console.error('Erro ao cadastrar cliente:', error);
             return res.status(500).json({ message: 'Erro interno ao cadastrar o cliente' });
         }
@@ -57,25 +69,32 @@ class ClienteController {
     static async update(req, res) {
         try {
             const { id } = req.params;
-            const { nome, email, senha } = req.body;
-
+            const { nome, sobrenome, cpf, dataNascimento, telefone, email, senha } = req.body;
             const dadosAtualizacao = {};
+
             if (nome) dadosAtualizacao.nome = nome;
+            if (sobrenome) dadosAtualizacao.sobrenome = sobrenome;
+            if (cpf) dadosAtualizacao.cpf = cpf;
+            if (dataNascimento) dadosAtualizacao.dataNascimento = dataNascimento;
+            if (telefone) dadosAtualizacao.telefone = telefone;
             if (email) dadosAtualizacao.email = email;
             if (senha) dadosAtualizacao.senha = senha;
+            if (req.file) dadosAtualizacao.imagem = `/uploads/perfis/${req.file.filename}`;
 
-            const clienteAtualizado = await ClienteModel.findByIdAndUpdate(
+            const clienteAtualizado = await Cliente.update(
                 id,
-                dadosAtualizacao,
-                { new: true, runValidators: true }
-            ).select('-senha');
+                dadosAtualizacao
+            );
 
             if (!clienteAtualizado) {
                 return res.status(404).json({ message: 'Cliente não encontrado para atualização' });
             }
 
-            return res.status(200).json(clienteAtualizado);
+            const clienteRetorno = clienteAtualizado.toObject();
+            delete clienteRetorno.senha;
+            return res.status(200).json(clienteRetorno);
         } catch (error) {
+            if (req.file) await fs.unlink(req.file.path).catch(() => {});
             console.error('Erro ao atualizar cliente:', error);
             return res.status(500).json({ message: 'Erro interno ao atualizar o cliente' });
         }
@@ -84,7 +103,7 @@ class ClienteController {
     static async delete(req, res) {
         try {
             const { id } = req.params;
-            const clienteRemovido = await ClienteModel.findByIdAndDelete(id);
+            const clienteRemovido = await Cliente.delete(id);
 
             if (!clienteRemovido) {
                 return res.status(404).json({ message: 'Cliente não encontrado para exclusão' });
@@ -99,7 +118,7 @@ class ClienteController {
 
     static async renderCreate(req, res) {
         try {
-            return res.render('cadastrar-cliente');
+            return res.sendFile(path.join(viewsPath, 'cadastrar-cliente.html'));
         } catch (error) {
             console.error('Erro ao abrir página de cadastro de cliente:', error);
             return res.status(500).send('Erro interno ao carregar a página');
@@ -108,8 +127,8 @@ class ClienteController {
 
     static async renderAll(req, res) {
         try {
-            const clientes = await ClienteModel.find().select('-senha');
-            return res.render('visualizar-clientes', { clientes });
+            const clientes = await Cliente.findAll();
+            return res.render('visualizar-cliente', { clientes });
         } catch (error) {
             console.error('Erro ao carregar visualização de clientes:', error);
             return res.status(500).send('Erro interno ao carregar a página');

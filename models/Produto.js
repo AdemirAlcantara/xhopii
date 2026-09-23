@@ -2,10 +2,10 @@ import ProdutoModel from './ProdutoSchema.js';
 
 class Produto {
 
-    constructor(nome, preco, categoria, descricao, imagem) {
+    constructor(nome, preco, fabricante, descricao, imagem) {
         this.nome = nome;
         this.preco = preco;
-        this.categoria = categoria;
+        this.fabricante = fabricante;
         this.descricao = descricao;
         this.imagem = imagem;
     }
@@ -14,7 +14,7 @@ class Produto {
         const novoProduto = new ProdutoModel({
             nome: this.nome,
             preco: this.preco,
-            categoria: this.categoria,
+            fabricante: this.fabricante,
             descricao: this.descricao,
             imagem: this.imagem
         });
@@ -31,7 +31,11 @@ class Produto {
     }
 
     static async update(id, dadosAtualizados) {
-        return await ProdutoModel.findByIdAndUpdate(id, dadosAtualizados, { new: true });
+        return await ProdutoModel.findByIdAndUpdate(
+            id,
+            dadosAtualizados,
+            { new: true, runValidators: true }
+        );
     }
 
     static async delete(id) {
