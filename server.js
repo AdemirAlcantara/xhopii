@@ -37,7 +37,7 @@ const PORT = process.env.PORT;
 async function startServer() {
     await Database.connect();
     app.listen(PORT, () => {
-        console.log(`Servidor a correr na porta ${PORT}`);
+        console.log(`Servidor rodando: http://localhost:${PORT}`);
     });
 }
 

@@ -1,7 +1,7 @@
-import mangoose from 'mongoose';
+import mongoose from 'mongoose';
 
 const ProdutoSchema = new mongoose.Schema({
-    nome: { type:string, required: true, trim: true },
+    nome: { type: String, required: true, trim: true },
     preco: {type: Number, required: true, trim: true },
     categoria: { type: String, required: true, trim: true },
     descricao: { type: String, required: true, trim: true },

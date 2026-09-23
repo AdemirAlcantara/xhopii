@@ -1,4 +1,4 @@
-import mangoose from 'mongoose';
+import mongoose from 'mongoose';
 
 const FuncionarioSchema = mongoose.Schema({
     nome: { type: String, required: true, trim: true },
@@ -9,6 +9,6 @@ const FuncionarioSchema = mongoose.Schema({
     timestamps: true
 });
 
-const FuncionarioMode = mongoose.model('Funcionario', FuncionarioSchema);
+const FuncionarioModel = mongoose.model('Funcionario', FuncionarioSchema);
 
-export default FuncionarioMode;
+export default FuncionarioModel;

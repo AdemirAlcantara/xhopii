@@ -1,6 +1,7 @@
 import ClienteModel from './ClienteSchema.js';
 
 class Cliente {
+    
     constructor(nome, email, senha) {
         this.nome = nome;
         this.email = email;
