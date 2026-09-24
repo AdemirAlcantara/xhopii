@@ -8,27 +8,8 @@
 </head>
 <body>
 
-    <header>
-        <section id="cabecalho-logo">
-            <img src="../img/logo.png">
-            <h1>Xhopii</h1>
-        </section>
-        <section id="cabecalho-logout">
-            <a href="login.html">Sair</a>
-        </section>
-    </header>
-
-    <nav class="menu-horizontal">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/clientes/cadastrar">Cadastro Cliente</a></li>
-            <li><a href="/funcionario/cadastrar">Cadastro Funcionário</a></li>
-            <li><a href="/produto/cadastrar">Cadastro Produto</a></li>
-            <li><a href="/clientes/visualizar">Ver Clientes</a></li>
-            <li><a href="/funcionarios/visualizar">Ver Funcionários</a></li>
-            <li><a href="/produtos/visualizar">Ver Produtos</a></li>
-        </ul>
-    </nav>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
 
     <section class="conteudo-visualizar">
         <section class="conteudo-visualizar-box">
@@ -37,19 +18,30 @@
                 <p>Não há clientes cadastrados.</p>
             <% } else { %>
                 <% clientes.forEach(cliente => { %>
+                <% const formatarData = data => { const partes = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date(data)); const valores = Object.fromEntries(partes.map(parte => [parte.type, parte.value])); return `${valores.hour}:${valores.minute} - ${valores.day}/${valores.month}/${valores.year}`; }; %>
+                <% const dataNascimento = new Date(cliente.dataNascimento); %>
+                <% const nascimentoDia = String(dataNascimento.getUTCDate()).padStart(2, '0'); %>
+                <% const nascimentoMes = String(dataNascimento.getUTCMonth() + 1).padStart(2, '0'); %>
+                <% const nascimentoAno = dataNascimento.getUTCFullYear(); %>
                 <section class="conteudo-bloco">
                     <% if (cliente.imagem) { %>
-                        <img src="<%= cliente.imagem %>" alt="Foto de perfil de <%= cliente.nome %>">
+                        <img class="objeto-imagem" src="<%= cliente.imagem %>" alt="Foto de perfil de <%= cliente.nome %>">
                     <% } %>
-                    <h2><%= cliente.nome %> <%= cliente.sobrenome %></h2>
-                    <p>CPF: <%= cliente.cpf %></p>
-                    <% const dataNascimento = new Date(cliente.dataNascimento); %>
-                    <% const dia = String(dataNascimento.getUTCDate()).padStart(2, '0'); %>
-                    <% const mes = String(dataNascimento.getUTCMonth() + 1).padStart(2, '0'); %>
-                    <% const ano = dataNascimento.getUTCFullYear(); %>
-                    <p>Data de Nascimento: <%= dia %>/<%= mes %>/<%= ano %></p>
-                    <p>Telefone: <%= cliente.telefone %></p>
-                    <p>E-mail: <%= cliente.email %></p>
+                    <section class="objeto-conteudo">
+                        <section class="objeto-informacoes">
+                            <h2><%= cliente.nome %> <%= cliente.sobrenome %></h2>
+                            <p>CPF: <%= cliente.cpf %></p>
+                            <p>Data de Nascimento: <%= nascimentoDia %>/<%= nascimentoMes %>/<%= nascimentoAno %></p>
+                            <p>Telefone: <%= cliente.telefone %></p>
+                            <p>E-mail: <%= cliente.email %></p>
+                            <p>Data de criação: <%= formatarData(cliente.createdAt) %></p>
+                            <p>Última alteração: <%= formatarData(cliente.updatedAt) %></p>
+                        </section>
+                        <section class="objeto-acoes">
+                            <a class="link-acao" href="/clientes/<%= cliente._id %>/atualizar">Alterar</a>
+                            <a class="link-acao botao-excluir" href="/clientes/<%= cliente._id %>/excluir">Excluir</a>
+                        </section>
+                    </section>
                 </section>
                 <% }); %>
             <% } %>

@@ -5,7 +5,8 @@ const ProdutoSchema = new mongoose.Schema({
     preco: {type: Number, required: true, trim: true },
     fabricante: { type: String, required: true, trim: true },
     descricao: { type: String, required: true, trim: true },
-    imagem: { type: String, required: true, trim: true }
+    imagem: { type: String, required: true, trim: true },
+    estoque: { type: Number, required: true, min: 0, default: 0 }
 }, {
     timestamps: true
 });

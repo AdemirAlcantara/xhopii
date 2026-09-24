@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <title>Xhopii - Home</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
+
+    <section class="conteudo-home">
+        <section class="conteudo-home-carousel">
+            <img id="img-carousel" src="/img/carousel-1.jpg" alt="Ofertas Xhopii">
+        </section>
+        <img src="/img/home-promocao.png" alt="Promoções Xhopii">
+        <section class="conteudo-home-descobertas">
+            <section class="conteudo-home-descobertas-titulo">
+                <h1>Descobertas do dia</h1>
+                <hr>
+            </section>
+            <section class="conteudo-home-descobertas-produto">
+                <% if (produtos.length === 0) { %>
+                    <p>Não há produtos cadastrados.</p>
+                <% } else { %>
+                    <% produtos.forEach(produto => { %>
+                        <a href="/produtos/<%= produto._id %>/comprar" class="produto-item-grid">
+                            <section>
+                                <% if (produto.imagem) { %>
+                                    <img class="produto-card-imagem" src="<%= produto.imagem %>" alt="<%= produto.nome %>">
+                                <% } %>
+                                <p><%= produto.nome %></p>
+                                <section class="produto-item-info">
+                                    <p id="valor">R$ <%= Number(produto.preco).toFixed(2) %></p>
+                                    <p id="disponiveis"><%= produto.estoque || 0 %> disponíveis</p>
+                                </section>
+                            </section>
+                        </a>
+                    <% }); %>
+                <% } %>
+            </section>
+        </section>
+    </section>
+
+    <%- include('partials/rodape') %>
+</body>
+</html>

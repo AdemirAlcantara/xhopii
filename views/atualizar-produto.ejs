@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Alterar Produto</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
+    <main class="pagina-formulario">
+        <section class="formulario-pagina">
+            <h1>Alterar produto</h1>
+            <form method="POST" action="/produtos/<%= produto._id %>/atualizar" enctype="multipart/form-data">
+                <input type="text" name="nome" value="<%= produto.nome %>" placeholder="Nome" required>
+                <input type="text" name="fabricante" value="<%= produto.fabricante %>" placeholder="Fabricante" required>
+                <textarea name="descricao" placeholder="Descrição" required><%= produto.descricao %></textarea>
+                <input type="number" name="preco" value="<%= produto.preco %>" min="0" step="0.01" placeholder="Preço" required>
+                <input type="number" name="estoque" value="<%= produto.estoque || 0 %>" min="0" step="1" placeholder="Quantidade disponível" required>
+                <label>Nova imagem (opcional)</label>
+                <input type="file" name="imagem" accept="image/jpeg,image/png,image/webp">
+                <button type="submit">Salvar alterações</button>
+            </form>
+            <a class="link-acao link-cancelar" href="/produtos/visualizar">Cancelar</a>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

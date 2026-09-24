@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Alterar Cliente</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
+    <main class="pagina-formulario">
+        <section class="formulario-pagina">
+            <h1>Alterar cliente</h1>
+            <form method="POST" action="/clientes/<%= cliente._id %>/atualizar" enctype="multipart/form-data">
+                <input type="text" name="nome" value="<%= cliente.nome %>" placeholder="Nome" required>
+                <input type="text" name="sobrenome" value="<%= cliente.sobrenome %>" placeholder="Sobrenome" required>
+                <input type="text" name="cpf" value="<%= cliente.cpf %>" placeholder="CPF" required>
+                <input type="date" name="dataNascimento" value="<%= new Date(cliente.dataNascimento).toISOString().slice(0, 10) %>" required>
+                <input type="text" name="telefone" value="<%= cliente.telefone %>" placeholder="Telefone" required>
+                <input type="email" name="email" value="<%= cliente.email %>" placeholder="E-mail" required>
+                <input type="password" name="senha" placeholder="Nova senha (opcional)">
+                <label>Nova foto de perfil (opcional)</label>
+                <input type="file" name="imagem" accept="image/jpeg,image/png,image/webp">
+                <button type="submit">Salvar alterações</button>
+            </form>
+            <a class="link-acao link-cancelar" href="/clientes/visualizar">Cancelar</a>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

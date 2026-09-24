@@ -12,4 +12,6 @@ const responderCadastro = (req, res, { status, message, sucesso, voltar, data })
     return res.status(status).json(data || { message });
 };
 
-export { responderCadastro };
+const requisicaoHtml = req => req.accepts(['html', 'json']) === 'html';
+
+export { requisicaoHtml, responderCadastro };

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Confirmar compra</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
+    <main class="compra-pagina">
+        <section class="confirmacao-box compra-confirmacao">
+            <h1>Confirmar compra</h1>
+            <p>Você deseja comprar <strong><%= quantidade %> unidade(s)</strong> de <strong><%= produto.nome %></strong>?</p>
+            <p class="compra-total">Total: R$ <%= (Number(produto.preco) * quantidade).toFixed(2) %></p>
+            <section class="confirmacao-acoes">
+                <form method="POST" action="/produtos/<%= produto._id %>/confirmar-compra">
+                    <input type="hidden" name="quantidade" value="<%= quantidade %>">
+                    <button type="submit">Confirmar compra</button>
+                </form>
+                <a class="link-acao link-cancelar" href="/produtos/<%= produto._id %>/comprar">Cancelar</a>
+            </section>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

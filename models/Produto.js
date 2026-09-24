@@ -2,12 +2,13 @@ import ProdutoModel from './ProdutoSchema.js';
 
 class Produto {
 
-    constructor(nome, preco, fabricante, descricao, imagem) {
+    constructor(nome, preco, fabricante, descricao, imagem, estoque = 0) {
         this.nome = nome;
         this.preco = preco;
         this.fabricante = fabricante;
         this.descricao = descricao;
         this.imagem = imagem;
+        this.estoque = estoque;
     }
 
     async save() {
@@ -16,7 +17,8 @@ class Produto {
             preco: this.preco,
             fabricante: this.fabricante,
             descricao: this.descricao,
-            imagem: this.imagem
+            imagem: this.imagem,
+            estoque: this.estoque
         });
 
         return await novoProduto.save();
@@ -34,7 +36,15 @@ class Produto {
         return await ProdutoModel.findByIdAndUpdate(
             id,
             dadosAtualizados,
-            { new: true, runValidators: true }
+            { returnDocument: 'after', runValidators: true }
+        );
+    }
+
+    static async comprar(id, quantidade) {
+        return await ProdutoModel.findOneAndUpdate(
+            { _id: id, estoque: { $gte: quantidade } },
+            { $inc: { estoque: -quantidade } },
+            { returnDocument: 'after', runValidators: true }
         );
     }
 

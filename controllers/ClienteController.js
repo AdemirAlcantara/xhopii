@@ -2,13 +2,12 @@ import Cliente from '../models/Cliente.js';
 import { viewsPath } from '../utils/pathUtils.js';
 import path from 'path';
 import fs from 'fs/promises';
-import { responderCadastro } from '../utils/responseUtils.js';
+import { requisicaoHtml, responderCadastro } from '../utils/responseUtils.js';
 
 class ClienteController {
 
     static async getAll(req, res) {
         try {
-            // Oculta o campo de senha no retorno da lista por segurança
             const clientes = await Cliente.findAll();
             return res.status(200).json(clientes.map(cliente => {
                 const retorno = cliente.toObject();
@@ -130,6 +129,9 @@ class ClienteController {
 
             const clienteRetorno = clienteAtualizado.toObject();
             delete clienteRetorno.senha;
+            if (requisicaoHtml(req)) {
+                return res.redirect('/clientes/visualizar');
+            }
             return res.status(200).json(clienteRetorno);
         } catch (error) {
             if (req.file) await fs.unlink(req.file.path).catch(() => {});
@@ -147,6 +149,9 @@ class ClienteController {
                 return res.status(404).json({ message: 'Cliente não encontrado para exclusão' });
             }
 
+            if (requisicaoHtml(req)) {
+                return res.redirect('/clientes/visualizar');
+            }
             return res.status(200).json({ message: 'Cliente removido com sucesso' });
         } catch (error) {
             console.error('Erro ao excluir cliente:', error);
@@ -161,6 +166,30 @@ class ClienteController {
             console.error('Erro ao abrir página de cadastro de cliente:', error);
             return res.status(500).send('Erro interno ao carregar a página');
         }
+    }
+
+    static async renderUpdate(req, res) {
+        const cliente = await Cliente.findById(req.params.id);
+
+        if (!cliente) {
+            return res.status(404).send('Cliente não encontrado');
+        }
+
+        return res.render('atualizar-cliente', { cliente });
+    }
+
+    static async renderDeleteConfirmation(req, res) {
+        const cliente = await Cliente.findById(req.params.id);
+
+        if (!cliente) {
+            return res.status(404).send('Cliente não encontrado');
+        }
+
+        return res.render('confirmar-exclusao', {
+            objeto: `${cliente.nome} ${cliente.sobrenome}`,
+            action: `/clientes/${cliente._id}/excluir`,
+            voltar: '/clientes/visualizar'
+        });
     }
 
     static async renderAll(req, res) {

@@ -44,7 +44,7 @@ class Cliente {
         return await ClienteModel.findByIdAndUpdate(
             id,
             dadosAtualizados,
-            { new: true, runValidators: true }
+            { returnDocument: 'after', runValidators: true }
         );
     }
 

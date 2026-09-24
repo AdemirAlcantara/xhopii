@@ -44,7 +44,7 @@ class Funcionario{
         return await FuncionarioModel.findByIdAndUpdate(
             id,
             dadosAtualizados,
-            { new: true, runValidators: true }
+            { returnDocument: 'after', runValidators: true }
         );
     }
 

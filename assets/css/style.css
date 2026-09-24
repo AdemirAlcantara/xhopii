@@ -13,6 +13,163 @@ body{
     background-color: rgb(245,245,245);
 }
 
+.objeto-imagem{
+    display: block;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 0 auto 1.5rem;
+    border-radius: 5px;
+}
+
+.objeto-conteudo{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+.objeto-informacoes{
+    text-align: left;
+}
+
+.objeto-acoes{
+    border-left: 1px solid rgba(0,0,0,.12);
+    padding-left: 2rem;
+}
+
+.objeto-acoes h3{
+    margin-bottom: .75rem;
+}
+
+.objeto-acoes form{
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    margin-bottom: .75rem;
+}
+
+.objeto-acoes input,
+.objeto-acoes textarea,
+.objeto-acoes button{
+    box-sizing: border-box;
+    width: 100%;
+    padding: .6rem;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 3px;
+}
+
+.objeto-acoes textarea{
+    min-height: 70px;
+    resize: vertical;
+}
+
+.objeto-acoes button{
+    background-color: rgb(251,86,48);
+    color: white;
+    cursor: pointer;
+    border: 0;
+}
+
+.objeto-acoes .botao-excluir{
+    background-color: rgb(180, 35, 35);
+}
+
+.link-acao{
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: .7rem 1rem;
+    margin-bottom: .7rem;
+    border-radius: 3px;
+    background-color: rgb(251,86,48);
+    color: rgb(255,255,255);
+    text-align: center;
+    text-decoration: none;
+}
+
+.link-acao.botao-excluir{
+    background-color: rgb(180,35,35);
+}
+
+.pagina-formulario,
+.pagina-confirmacao{
+    width: 100%;
+    min-height: 520px;
+    padding: 3rem 1rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.formulario-pagina,
+.confirmacao-box{
+    width: min(640px, 100%);
+    padding: 2rem;
+    box-sizing: border-box;
+    background-color: rgb(255,255,255);
+    border-radius: 5px;
+}
+
+.formulario-pagina h1,
+.confirmacao-box h1{
+    margin-bottom: 1.5rem;
+}
+
+.formulario-pagina form{
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.formulario-pagina input,
+.formulario-pagina textarea,
+.formulario-pagina button,
+.confirmacao-box button{
+    box-sizing: border-box;
+    width: 100%;
+    padding: .7rem;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 3px;
+}
+
+.formulario-pagina textarea{
+    min-height: 100px;
+    resize: vertical;
+}
+
+.formulario-pagina button,
+.confirmacao-box button{
+    border: 0;
+    background-color: rgb(251,86,48);
+    color: white;
+    cursor: pointer;
+}
+
+.confirmacao-box{
+    text-align: center;
+}
+
+.confirmacao-acoes{
+    max-width: 360px;
+    margin: 2rem auto 0;
+}
+
+@media (max-width: 700px){
+    .objeto-conteudo{
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .objeto-acoes{
+        border-left: 0;
+        border-top: 1px solid rgba(0,0,0,.12);
+        padding-left: 0;
+        padding-top: 1rem;
+    }
+}
+
 .cabecalho-login{
     width: 60%;
     margin-left: 20%;
@@ -362,8 +519,20 @@ body{
 }
 
 .produto-item-grid img{
+    display: block;
     width: 90%;
     height: 125px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.produto-card-imagem{
+    object-fit: contain;
+    background-color: rgb(255,255,255);
+}
+
+.conteudo-visualizar .objeto-imagem.produto-lista-imagem{
+    object-fit: contain;
 }
 
 .produto-item-grid p{
@@ -416,7 +585,8 @@ body{
     color: rgb(195, 195, 195);
 }
 
-.conteudo-cadastro .conteudo-formulario-cadastro form label, input{
+.conteudo-cadastro .conteudo-formulario-cadastro form label,
+.conteudo-cadastro .conteudo-formulario-cadastro form input{
     display: block;
     height: 40px;
     margin-left: 20%;
@@ -661,6 +831,288 @@ input[type=file]::file-selector-button:hover {
     align-items: flex-start;
     flex-direction: column;
 }
+
+/* ========= INICIO AJUSTES DAS TELAS CRUD ========== */
+
+.conteudo-visualizar .conteudo-visualizar-box .conteudo-bloco{
+    box-sizing: border-box;
+    padding: 1.5rem;
+}
+
+.conteudo-visualizar .objeto-imagem{
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 1.5rem;
+    object-fit: cover;
+}
+
+.conteudo-visualizar .objeto-conteudo{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 2rem;
+    align-items: start;
+}
+
+.conteudo-visualizar .objeto-informacoes{
+    min-width: 0;
+    text-align: left;
+}
+
+.conteudo-visualizar .objeto-informacoes h2{
+    margin-bottom: 1rem;
+}
+
+.conteudo-visualizar .objeto-informacoes p{
+    margin-bottom: .55rem;
+}
+
+.conteudo-visualizar .objeto-acoes{
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    border-left: 1px solid rgba(0,0,0,.12);
+    padding-left: 1.5rem;
+}
+
+.conteudo-visualizar .objeto-acoes .link-acao{
+    margin: 0;
+}
+
+.pagina-formulario,
+.pagina-confirmacao{
+    min-height: 600px;
+    padding: 2.5rem 1rem;
+    background-color: rgb(195,195,195);
+}
+
+.formulario-pagina,
+.confirmacao-box{
+    width: 40%;
+    min-width: 360px;
+    padding: 1.5rem 2rem;
+    background-color: rgb(255,255,255);
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.14);
+}
+
+.formulario-pagina h1,
+.confirmacao-box h1{
+    color: rgb(251,86,48);
+    font-size: 20px;
+    text-align: center;
+    margin: 0 0 1.25rem;
+}
+
+.formulario-pagina form{
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+}
+
+.formulario-pagina form input,
+.formulario-pagina form textarea,
+.formulario-pagina form button{
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    margin: 0;
+    padding: 0 .8rem;
+    border: 1px solid rgba(0,0,0,.09);
+    border-radius: 1px;
+}
+
+.formulario-pagina form textarea{
+    height: 100px;
+    padding-top: .7rem;
+    resize: vertical;
+}
+
+.formulario-pagina form label{
+    height: auto;
+    margin: .25rem 0 -.45rem;
+    color: rgb(251,86,48);
+    font-weight: bold;
+}
+
+.formulario-pagina form button,
+.confirmacao-box .botao-excluir{
+    margin-top: .35rem;
+    background-color: rgb(251,86,48);
+    color: rgb(255,255,255);
+    font-size: 15px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.formulario-pagina .link-acao,
+.confirmacao-acoes .link-acao{
+    margin-top: 1rem;
+}
+
+.link-cancelar{
+    background-color: rgb(110,110,110) !important;
+}
+
+.confirmacao-box{
+    text-align: center;
+}
+
+.confirmacao-box p{
+    margin: 1rem 0;
+}
+
+.confirmacao-acoes{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    max-width: 420px;
+    margin: 1.5rem auto 0;
+}
+
+.confirmacao-acoes form{
+    margin: 0;
+}
+
+.confirmacao-acoes .link-acao{
+    margin: 0;
+}
+
+.compra-pagina{
+    width: 100%;
+    min-height: 600px;
+    padding: 2.5rem 1rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: rgb(195,195,195);
+}
+
+.compra-box{
+    width: min(760px, 100%);
+    padding: 2rem;
+    box-sizing: border-box;
+    background-color: rgb(255,255,255);
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.14);
+}
+
+.compra-box h1{
+    margin-bottom: 1.5rem;
+    color: rgb(251,86,48);
+    text-align: center;
+}
+
+.compra-produto{
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.compra-produto-imagem{
+    width: 240px;
+    height: 240px;
+    object-fit: contain;
+    background-color: rgb(255,255,255);
+}
+
+.compra-produto-info h2{
+    margin-bottom: .8rem;
+    color: rgb(251,86,48);
+}
+
+.compra-produto-info p{
+    margin-bottom: .7rem;
+}
+
+.compra-preco,
+.compra-total{
+    color: rgb(251,119,48);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.compra-form{
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    margin-top: 1rem;
+}
+
+.compra-form input,
+.compra-form button,
+.compra-confirmacao button{
+    box-sizing: border-box;
+    width: 100%;
+    height: 42px;
+    margin: 0;
+    padding: 0 .8rem;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 2px;
+}
+
+.compra-form button,
+.compra-confirmacao button{
+    border: 0;
+    background-color: rgb(251,86,48);
+    color: rgb(255,255,255);
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.compra-erro,
+.compra-esgotado{
+    margin: 1rem 0;
+    color: rgb(180,35,35);
+    font-weight: bold;
+}
+
+.compra-confirmacao{
+    text-align: center;
+}
+
+.compra-confirmacao .confirmacao-acoes{
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 700px){
+    .compra-produto{
+        grid-template-columns: 1fr;
+    }
+
+    .compra-produto-imagem{
+        width: min(240px, 100%);
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 760px){
+    .conteudo-visualizar .objeto-conteudo{
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .conteudo-visualizar .objeto-acoes{
+        border-left: 0;
+        border-top: 1px solid rgba(0,0,0,.12);
+        padding: 1rem 0 0;
+    }
+
+    .formulario-pagina,
+    .confirmacao-box{
+        width: min(100%, 520px);
+        min-width: 0;
+    }
+
+    .confirmacao-acoes{
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========= FIM AJUSTES DAS TELAS CRUD ========== */
 
 .rodape .conteudo-rodape-info .conteudo-rodape h5{
     text-transform: uppercase;

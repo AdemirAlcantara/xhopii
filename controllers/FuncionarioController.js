@@ -2,13 +2,9 @@ import Funcionario from '../models/Funcionario.js';
 import { viewsPath } from '../utils/pathUtils.js';
 import path from 'path';
 import fs from 'fs/promises';
-import { responderCadastro } from '../utils/responseUtils.js';
+import { requisicaoHtml, responderCadastro } from '../utils/responseUtils.js';
 
 class FuncionarioController {
-
-    // ==========================================
-    // MÉTODOS DA API RESTful (JSON)
-    // ==========================================
 
     static async getAll(req, res) {
         try {
@@ -93,6 +89,9 @@ class FuncionarioController {
 
             const retorno = funcionarioAtualizado.toObject();
             delete retorno.senha;
+            if (requisicaoHtml(req)) {
+                return res.redirect('/funcionarios/visualizar');
+            }
             return res.status(200).json(retorno);
         } catch (error) {
             if (req.file) await fs.unlink(req.file.path).catch(() => {});
@@ -110,16 +109,15 @@ class FuncionarioController {
                 return res.status(404).json({ message: 'Funcionário não encontrado para exclusão' });
             }
 
+            if (requisicaoHtml(req)) {
+                return res.redirect('/funcionarios/visualizar');
+            }
             return res.status(200).json({ message: 'Funcionário removido com sucesso' });
         } catch (error) {
             console.error('Erro ao excluir funcionário:', error);
             return res.status(500).json({ message: 'Erro interno ao excluir o funcionário' });
         }
     }
-
-    // ==========================================
-    // RENDERS DAS TELAS (EJS)
-    // ==========================================
 
     static async renderCreate(req, res) {
         try {
@@ -128,6 +126,30 @@ class FuncionarioController {
             console.error('Erro ao abrir página de cadastro de funcionário:', error);
             return res.status(500).send('Erro interno ao carregar a página');
         }
+    }
+
+    static async renderUpdate(req, res) {
+        const funcionario = await Funcionario.findById(req.params.id);
+
+        if (!funcionario) {
+            return res.status(404).send('Funcionário não encontrado');
+        }
+
+        return res.render('atualizar-funcionario', { funcionario });
+    }
+
+    static async renderDeleteConfirmation(req, res) {
+        const funcionario = await Funcionario.findById(req.params.id);
+
+        if (!funcionario) {
+            return res.status(404).send('Funcionário não encontrado');
+        }
+
+        return res.render('confirmar-exclusao', {
+            objeto: `${funcionario.nome} ${funcionario.sobrenome}`,
+            action: `/funcionarios/${funcionario._id}/excluir`,
+            voltar: '/funcionarios/visualizar'
+        });
     }
 
     static async renderAll(req, res) {

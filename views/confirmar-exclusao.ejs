@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Confirmar exclusão</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
+    <main class="pagina-confirmacao">
+        <section class="confirmacao-box">
+            <h1>Confirmar exclusão</h1>
+            <p>Deseja realmente excluir <strong><%= objeto %></strong>?</p>
+            <section class="confirmacao-acoes">
+                <form method="POST" action="<%= action %>">
+                    <button class="botao-excluir" type="submit">Confirmar exclusão</button>
+                </form>
+                <a class="link-acao link-cancelar" href="<%= voltar %>">Cancelar</a>
+            </section>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

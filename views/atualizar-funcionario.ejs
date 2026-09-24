@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Alterar Funcionário</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
+    <main class="pagina-formulario">
+        <section class="formulario-pagina">
+            <h1>Alterar funcionário</h1>
+            <form method="POST" action="/funcionarios/<%= funcionario._id %>/atualizar" enctype="multipart/form-data">
+                <input type="text" name="nome" value="<%= funcionario.nome %>" placeholder="Nome" required>
+                <input type="text" name="sobrenome" value="<%= funcionario.sobrenome %>" placeholder="Sobrenome" required>
+                <input type="text" name="cpf" value="<%= funcionario.cpf %>" placeholder="CPF" required>
+                <input type="date" name="dataNascimento" value="<%= new Date(funcionario.dataNascimento).toISOString().slice(0, 10) %>" required>
+                <input type="text" name="telefone" value="<%= funcionario.telefone %>" placeholder="Telefone" required>
+                <input type="text" name="cargo" value="<%= funcionario.cargo %>" placeholder="Cargo" required>
+                <input type="number" name="salario" value="<%= funcionario.salario %>" min="0" step="0.01" placeholder="Salário" required>
+                <input type="email" name="email" value="<%= funcionario.email %>" placeholder="E-mail" required>
+                <input type="password" name="senha" placeholder="Nova senha (opcional)">
+                <label>Nova foto de perfil (opcional)</label>
+                <input type="file" name="imagem" accept="image/jpeg,image/png,image/webp">
+                <button type="submit">Salvar alterações</button>
+            </form>
+            <a class="link-acao link-cancelar" href="/funcionarios/visualizar">Cancelar</a>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Compra realizada</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
+    <main class="compra-pagina">
+        <section class="confirmacao-box compra-confirmacao">
+            <h1>Compra realizada</h1>
+            <p>Sua compra de <strong><%= quantidade %> unidade(s)</strong> de <strong><%= produto.nome %></strong> foi confirmada.</p>
+            <p>Estoque restante: <strong><%= produto.estoque %> unidade(s)</strong>.</p>
+            <a class="link-acao" href="/">Voltar para a home</a>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

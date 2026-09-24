@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Comprar produto</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
+    <main class="compra-pagina">
+        <section class="compra-box">
+            <h1>Comprar produto</h1>
+            <section class="compra-produto">
+                <% if (produto.imagem) { %><img class="compra-produto-imagem" src="<%= produto.imagem %>" alt="<%= produto.nome %>"><% } %>
+                <section class="compra-produto-info">
+                    <h2><%= produto.nome %></h2>
+                    <p>Fabricante: <%= produto.fabricante %></p>
+                    <p><%= produto.descricao %></p>
+                    <p class="compra-preco">R$ <%= Number(produto.preco).toFixed(2) %></p>
+                    <p>Disponível: <%= produto.estoque %> unidade(s)</p>
+                </section>
+            </section>
+            <% if (erro) { %><p class="compra-erro"><%= erro %></p><% } %>
+            <% if (produto.estoque > 0) { %>
+                <form class="compra-form" method="POST" action="/produtos/<%= produto._id %>/comprar">
+                    <label for="quantidade">Quantidade</label>
+                    <input id="quantidade" type="number" name="quantidade" min="1" max="<%= produto.estoque %>" value="1" required>
+                    <button type="submit">Comprar</button>
+                </form>
+            <% } else { %>
+                <p class="compra-esgotado">Produto sem estoque.</p>
+            <% } %>
+            <a class="link-acao link-cancelar" href="/">Voltar para a home</a>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

@@ -6,21 +6,8 @@
     <title>Xhopii - Funcionarios</title>
 </head>
 <body>
-    <header>
-        <section id="cabecalho-logo"><img src="/img/logo.png" alt="Xhopii"><h1>Xhopii</h1></section>
-        <section id="cabecalho-logout"><a href="/login">Sair</a></section>
-    </header>
-    <nav class="menu-horizontal">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/clientes/cadastrar">Cadastro Cliente</a></li>
-            <li><a href="/funcionario/cadastrar">Cadastro Funcionario</a></li>
-            <li><a href="/produto/cadastrar">Cadastro Produto</a></li>
-            <li><a href="/clientes/visualizar">Ver Clientes</a></li>
-            <li><a href="/funcionarios/visualizar">Ver Funcionarios</a></li>
-            <li><a href="/produtos/visualizar">Ver Produtos</a></li>
-        </ul>
-    </nav>
+    <%- include('partials/cabecalho') %>
+    <%- include('partials/menu') %>
     <main class="conteudo-visualizar">
         <section class="conteudo-visualizar-box">
             <h1>Funcionarios</h1>
@@ -28,13 +15,27 @@
                 <p>Nao ha funcionarios cadastrados.</p>
             <% } else { %>
                 <% funcionarios.forEach(funcionario => { %>
+                    <% const formatarData = data => { const partes = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date(data)); const valores = Object.fromEntries(partes.map(parte => [parte.type, parte.value])); return `${valores.hour}:${valores.minute} - ${valores.day}/${valores.month}/${valores.year}`; }; %>
+                    <% const dataNascimento = new Date(funcionario.dataNascimento); %>
                     <section class="conteudo-bloco">
-                        <% if (funcionario.imagem) { %><img src="<%= funcionario.imagem %>" alt="Foto de perfil"><% } %>
-                        <h2><%= funcionario.nome %> <%= funcionario.sobrenome %></h2>
-                        <p>CPF: <%= funcionario.cpf %></p>
-                        <p>Telefone: <%= funcionario.telefone %></p>
-                        <p>Cargo: <%= funcionario.cargo %></p>
-                        <p>E-mail: <%= funcionario.email %></p>
+                        <% if (funcionario.imagem) { %><img class="objeto-imagem" src="<%= funcionario.imagem %>" alt="Foto de perfil"><% } %>
+                        <section class="objeto-conteudo">
+                            <section class="objeto-informacoes">
+                                <h2><%= funcionario.nome %> <%= funcionario.sobrenome %></h2>
+                                <p>CPF: <%= funcionario.cpf %></p>
+                                <p>Data de Nascimento: <%= String(dataNascimento.getUTCDate()).padStart(2, '0') %>/<%= String(dataNascimento.getUTCMonth() + 1).padStart(2, '0') %>/<%= dataNascimento.getUTCFullYear() %></p>
+                                <p>Telefone: <%= funcionario.telefone %></p>
+                                <p>Cargo: <%= funcionario.cargo %></p>
+                                <p>Salário: R$ <%= Number(funcionario.salario).toFixed(2) %></p>
+                                <p>E-mail: <%= funcionario.email %></p>
+                                <p>Data de criação: <%= formatarData(funcionario.createdAt) %></p>
+                                <p>Última alteração: <%= formatarData(funcionario.updatedAt) %></p>
+                            </section>
+                            <section class="objeto-acoes">
+                                <a class="link-acao" href="/funcionarios/<%= funcionario._id %>/atualizar">Alterar</a>
+                                <a class="link-acao botao-excluir" href="/funcionarios/<%= funcionario._id %>/excluir">Excluir</a>
+                            </section>
+                        </section>
                     </section>
                 <% }); %>
             <% } %>
