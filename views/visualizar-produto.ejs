@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Produtos</title>
+</head>
+<body>
+    <header>
+        <section id="cabecalho-logo"><img src="/img/logo.png" alt="Xhopii"><h1>Xhopii</h1></section>
+        <section id="cabecalho-logout"><a href="/login">Sair</a></section>
+    </header>
+    <nav class="menu-horizontal">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/clientes/cadastrar">Cadastro Cliente</a></li>
+            <li><a href="/funcionario/cadastrar">Cadastro Funcionario</a></li>
+            <li><a href="/produto/cadastrar">Cadastro Produto</a></li>
+            <li><a href="/clientes/visualizar">Ver Clientes</a></li>
+            <li><a href="/funcionarios/visualizar">Ver Funcionarios</a></li>
+            <li><a href="/produtos/visualizar">Ver Produtos</a></li>
+        </ul>
+    </nav>
+    <main class="conteudo-visualizar">
+        <section class="conteudo-visualizar-box">
+            <h1>Produtos</h1>
+            <% if (produtos.length === 0) { %>
+                <p>Nao ha produtos cadastrados.</p>
+            <% } else { %>
+                <% produtos.forEach(produto => { %>
+                    <section class="conteudo-bloco">
+                        <% if (produto.imagem) { %><img src="<%= produto.imagem %>" alt="<%= produto.nome %>"><% } %>
+                        <h2><%= produto.nome %></h2>
+                        <p>Fabricante: <%= produto.fabricante %></p>
+                        <p>Descricao: <%= produto.descricao %></p>
+                        <p>Preco: R$ <%= Number(produto.preco).toFixed(2) %></p>
+                    </section>
+                <% }); %>
+            <% } %>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

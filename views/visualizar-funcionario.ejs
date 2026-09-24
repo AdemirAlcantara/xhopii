@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Funcionarios</title>
+</head>
+<body>
+    <header>
+        <section id="cabecalho-logo"><img src="/img/logo.png" alt="Xhopii"><h1>Xhopii</h1></section>
+        <section id="cabecalho-logout"><a href="/login">Sair</a></section>
+    </header>
+    <nav class="menu-horizontal">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/clientes/cadastrar">Cadastro Cliente</a></li>
+            <li><a href="/funcionario/cadastrar">Cadastro Funcionario</a></li>
+            <li><a href="/produto/cadastrar">Cadastro Produto</a></li>
+            <li><a href="/clientes/visualizar">Ver Clientes</a></li>
+            <li><a href="/funcionarios/visualizar">Ver Funcionarios</a></li>
+            <li><a href="/produtos/visualizar">Ver Produtos</a></li>
+        </ul>
+    </nav>
+    <main class="conteudo-visualizar">
+        <section class="conteudo-visualizar-box">
+            <h1>Funcionarios</h1>
+            <% if (funcionarios.length === 0) { %>
+                <p>Nao ha funcionarios cadastrados.</p>
+            <% } else { %>
+                <% funcionarios.forEach(funcionario => { %>
+                    <section class="conteudo-bloco">
+                        <% if (funcionario.imagem) { %><img src="<%= funcionario.imagem %>" alt="Foto de perfil"><% } %>
+                        <h2><%= funcionario.nome %> <%= funcionario.sobrenome %></h2>
+                        <p>CPF: <%= funcionario.cpf %></p>
+                        <p>Telefone: <%= funcionario.telefone %></p>
+                        <p>Cargo: <%= funcionario.cargo %></p>
+                        <p>E-mail: <%= funcionario.email %></p>
+                    </section>
+                <% }); %>
+            <% } %>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

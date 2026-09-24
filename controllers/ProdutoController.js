@@ -2,6 +2,7 @@ import Produto from '../models/Produto.js';
 import { viewsPath } from '../utils/pathUtils.js';
 import path from 'path';
 import fs from 'fs/promises';
+import { responderCadastro } from '../utils/responseUtils.js';
 
 class ProdutoController {
 
@@ -39,19 +40,19 @@ class ProdutoController {
             const imagem = req.file ? `/uploads/produtos/${req.file.filename}` : null;
 
             if (!nome || preco === undefined || !fabricante || !descricao || !imagem) {
-                return res.status(400).json({ message: 'Nome, preço, fabricante, descrição e imagem são obrigatórios' });
+                return responderCadastro(req, res, { status: 400, sucesso: false, voltar: '/produto/cadastrar', message: 'Nome, preço, fabricante, descrição e imagem são obrigatórios.' });
             }
 
             const novoProduto = new Produto(nome, Number(preco), fabricante, descricao, imagem);
             const produtoSalvo = await novoProduto.save();
 
-            return res.status(201).json(produtoSalvo);
+            return responderCadastro(req, res, { status: 201, sucesso: true, voltar: '/produto/cadastrar', message: 'Produto cadastrado com sucesso.', data: produtoSalvo });
         } catch (error) {
             if (req.file) {
                 await fs.unlink(req.file.path).catch(() => {});
             }
             console.error('Erro ao cadastrar produto:', error);
-            return res.status(500).json({ message: 'Erro interno ao cadastrar o produto' });
+            return responderCadastro(req, res, { status: 500, sucesso: false, voltar: '/produto/cadastrar', message: 'Não foi possível cadastrar o produto.' });
         }
     }
 
@@ -113,10 +114,11 @@ class ProdutoController {
 
     static async renderAllProdutos(req, res) {
         try {
-            return res.sendFile(path.join(viewsPath, 'ver-produto.html'));
+            const produtos = await Produto.findAll();
+            return res.render('visualizar-produto', { produtos });
         } catch (error) {
             console.error('Erro ao carregar visualização de produtos:', error);
-            return res.status(500).send('Erro interno ao carregar a página');
+            return res.render('visualizar-produto', { produtos: [] });
         }
     }
 }

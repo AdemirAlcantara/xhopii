@@ -2,6 +2,7 @@ import Funcionario from '../models/Funcionario.js';
 import { viewsPath } from '../utils/pathUtils.js';
 import path from 'path';
 import fs from 'fs/promises';
+import { responderCadastro } from '../utils/responseUtils.js';
 
 class FuncionarioController {
 
@@ -54,16 +55,16 @@ class FuncionarioController {
             const imagem = req.file ? `/uploads/perfis/${req.file.filename}` : null;
 
             if (!nome || !sobrenome || !cpf || !dataNascimento || !telefone || !cargo || salario === undefined || !email || !senha) {
-                return res.status(400).json({ message: 'Todos os campos do funcionário são obrigatórios' });
+                return responderCadastro(req, res, { status: 400, sucesso: false, voltar: '/funcionario/cadastrar', message: 'Todos os campos do funcionário são obrigatórios.' });
             }
 
             const novoFuncionario = new Funcionario({ nome, sobrenome, cpf, dataNascimento, telefone, cargo, salario: Number(salario), email, senha, imagem });
             const funcionarioSalvo = await novoFuncionario.save();
-            return res.status(201).json(funcionarioSalvo);
+            return responderCadastro(req, res, { status: 201, sucesso: true, voltar: '/funcionario/cadastrar', message: 'Funcionário cadastrado com sucesso.', data: funcionarioSalvo });
         } catch (error) {
             if (req.file) await fs.unlink(req.file.path).catch(() => {});
             console.error('Erro ao cadastrar funcionário:', error);
-            return res.status(500).json({ message: 'Erro interno ao cadastrar o funcionário' });
+            return responderCadastro(req, res, { status: 500, sucesso: false, voltar: '/funcionario/cadastrar', message: 'Não foi possível cadastrar o funcionário.' });
         }
     }
 
@@ -131,10 +132,11 @@ class FuncionarioController {
 
     static async renderAll(req, res) {
         try {
-            return res.sendFile(path.join(viewsPath, 'visualizar-funcionario.html'));
+            const funcionarios = await Funcionario.findAll();
+            return res.render('visualizar-funcionario', { funcionarios });
         } catch (error) {
             console.error('Erro ao carregar visualização de funcionários:', error);
-            return res.status(500).send('Erro interno ao carregar a página');
+            return res.render('visualizar-funcionario', { funcionarios: [] });
         }
     }
 }

@@ -2,6 +2,7 @@ import Cliente from '../models/Cliente.js';
 import { viewsPath } from '../utils/pathUtils.js';
 import path from 'path';
 import fs from 'fs/promises';
+import { responderCadastro } from '../utils/responseUtils.js';
 
 class ClienteController {
 
@@ -44,12 +45,12 @@ class ClienteController {
             const imagem = req.file ? `/uploads/perfis/${req.file.filename}` : null;
 
             if (!nome || !sobrenome || !cpf || !dataNascimento || !telefone || !email || !senha) {
-                return res.status(400).json({ message: 'Nome, sobrenome, CPF, data de nascimento, telefone, e-mail e senha são obrigatórios' });
+                return responderCadastro(req, res, { status: 400, sucesso: false, voltar: '/clientes/cadastrar', message: 'Nome, sobrenome, CPF, data de nascimento, telefone, e-mail e senha são obrigatórios' });
             }
 
             const clienteExistente = await Cliente.findByEmail(email);
             if (clienteExistente) {
-                return res.status(409).json({ message: 'Já existe um cliente cadastrado com este e-mail' });
+                return responderCadastro(req, res, { status: 409, sucesso: false, voltar: '/clientes/cadastrar', message: 'Já existe um cliente cadastrado com este e-mail' });
             }
 
             const novoCliente = new Cliente({ nome, sobrenome, cpf, dataNascimento, telefone, email, senha, imagem });
@@ -58,11 +59,48 @@ class ClienteController {
             const clienteRetorno = clienteSalvo.toObject();
             delete clienteRetorno.senha;
 
-            return res.status(201).json(clienteRetorno);
+            return responderCadastro(req, res, { status: 201, sucesso: true, voltar: '/clientes/cadastrar', message: 'Cliente cadastrado com sucesso.', data: clienteRetorno });
         } catch (error) {
             if (req.file) await fs.unlink(req.file.path).catch(() => {});
             console.error('Erro ao cadastrar cliente:', error);
-            return res.status(500).json({ message: 'Erro interno ao cadastrar o cliente' });
+            return responderCadastro(req, res, { status: 500, sucesso: false, voltar: '/clientes/cadastrar', message: 'Não foi possível cadastrar o cliente.' });
+        }
+    }
+
+    static async login(req, res) {
+        try {
+            const email = req.body.email || req.body.inputEmailLog;
+            const senha = req.body.senha || req.body.inputSenhaLog;
+
+            if (!email || !senha) {
+                return res.status(400).json({ message: 'E-mail e senha são obrigatórios' });
+            }
+
+            const cliente = await Cliente.findByEmail(email);
+            if (!cliente || cliente.senha !== senha) {
+                return res.status(401).json({ message: 'E-mail ou senha inválidos' });
+            }
+
+            return res.redirect('/');
+        } catch (error) {
+            console.error('Erro ao realizar login:', error);
+            return res.status(500).json({ message: 'Erro interno ao realizar login' });
+        }
+    }
+
+    static async recoverPassword(req, res) {
+        try {
+            const email = req.body.email || req.body.inputEmailLog;
+
+            if (!email) {
+                return res.status(400).json({ message: 'E-mail é obrigatório' });
+            }
+
+            await Cliente.findByEmail(email);
+            return res.status(200).json({ message: 'Se o e-mail estiver cadastrado, as instruções serão enviadas.' });
+        } catch (error) {
+            console.error('Erro ao recuperar senha:', error);
+            return res.status(500).json({ message: 'Erro interno ao recuperar senha' });
         }
     }
 
@@ -131,7 +169,7 @@ class ClienteController {
             return res.render('visualizar-cliente', { clientes });
         } catch (error) {
             console.error('Erro ao carregar visualização de clientes:', error);
-            return res.status(500).send('Erro interno ao carregar a página');
+            return res.render('visualizar-cliente', { clientes: [] });
         }
     }
 }

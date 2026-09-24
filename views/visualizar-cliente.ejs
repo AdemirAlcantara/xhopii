@@ -24,27 +24,35 @@
             <li><a href="/clientes/cadastrar">Cadastro Cliente</a></li>
             <li><a href="/funcionario/cadastrar">Cadastro Funcionário</a></li>
             <li><a href="/produto/cadastrar">Cadastro Produto</a></li>
-            <li><a href="/clientes">Ver Clientes</a></li>
-            <li><a href="#">Ver Funcionários</a></li>
-            <li><a href="#">Ver Produtos</a></li>
+            <li><a href="/clientes/visualizar">Ver Clientes</a></li>
+            <li><a href="/funcionarios/visualizar">Ver Funcionários</a></li>
+            <li><a href="/produtos/visualizar">Ver Produtos</a></li>
         </ul>
     </nav>
 
     <section class="conteudo-visualizar">
         <section class="conteudo-visualizar-box">
             <h1>Clientes</h1>
-            <% clientes.forEach(cliente => { %>
+            <% if (clientes.length === 0) { %>
+                <p>Não há clientes cadastrados.</p>
+            <% } else { %>
+                <% clientes.forEach(cliente => { %>
                 <section class="conteudo-bloco">
                     <% if (cliente.imagem) { %>
                         <img src="<%= cliente.imagem %>" alt="Foto de perfil de <%= cliente.nome %>">
                     <% } %>
                     <h2><%= cliente.nome %> <%= cliente.sobrenome %></h2>
                     <p>CPF: <%= cliente.cpf %></p>
-                    <p>Data de Nascimento: <%= cliente.dataNascimento %></p>
+                    <% const dataNascimento = new Date(cliente.dataNascimento); %>
+                    <% const dia = String(dataNascimento.getUTCDate()).padStart(2, '0'); %>
+                    <% const mes = String(dataNascimento.getUTCMonth() + 1).padStart(2, '0'); %>
+                    <% const ano = dataNascimento.getUTCFullYear(); %>
+                    <p>Data de Nascimento: <%= dia %>/<%= mes %>/<%= ano %></p>
                     <p>Telefone: <%= cliente.telefone %></p>
                     <p>E-mail: <%= cliente.email %></p>
                 </section>
-            <% }); %>
+                <% }); %>
+            <% } %>
         </section>
     </section>
 
