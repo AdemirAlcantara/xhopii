@@ -1,4 +1,5 @@
 import FuncionarioModel from './FuncionarioSchema.js';
+import { hashPassword } from '../utils/passwordUtils.js';
 
 class Funcionario{
 
@@ -25,7 +26,7 @@ class Funcionario{
             cargo: this.cargo,
             salario: this.salario,
             email: this.email,
-            senha: this.senha,
+            senha: await hashPassword(this.senha),
             imagem: this.imagem
         });
 
@@ -41,6 +42,10 @@ class Funcionario{
     }
 
     static async update(id, dadosAtualizados) {
+        if (dadosAtualizados.senha) {
+            dadosAtualizados.senha = await hashPassword(dadosAtualizados.senha);
+        }
+
         return await FuncionarioModel.findByIdAndUpdate(
             id,
             dadosAtualizados,

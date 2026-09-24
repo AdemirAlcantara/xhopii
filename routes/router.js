@@ -1,16 +1,14 @@
 import express from "express";
 import path from 'path';
+import AuthController from '../controllers/AuthController.js';
 import ClienteController from '../controllers/ClienteController.js';
 import FuncionarioController from '../controllers/FuncionarioController.js';
 import ProdutoController from '../controllers/ProdutoController.js';
 import uploadProduto, { uploadPerfil } from '../middlewares/uploadMiddleware.js';
 import { viewsPath } from '../utils/pathUtils.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
-
-router.get("/", (req, res) => {
-    return ProdutoController.renderHome(req, res);
-});
 
 router.get('/login', (req, res) => {
     res.sendFile(path.join(viewsPath, 'login.html'));
@@ -19,16 +17,27 @@ router.get('/login', (req, res) => {
 router.get('/recuperar-senha', (req, res) => {
     res.sendFile(path.join(viewsPath, 'recuperar-senha.html'));
 });
-router.post('/login', ClienteController.login);
-router.post('/recuperar-senha', ClienteController.recoverPassword);
+router.post('/login', AuthController.login);
+router.post('/recuperar-senha', AuthController.requestPasswordReset);
+router.get('/recuperar-senha/:token', AuthController.renderPasswordReset);
+router.post('/recuperar-senha/:token', AuthController.resetPassword);
+router.get('/logout', AuthController.logout);
 
+// O cadastro inicial de cliente precisa ser acessível sem JWT.
 router.get('/clientes/cadastrar', ClienteController.renderCreate);
+router.post('/clientes', uploadPerfil, ClienteController.create);
+
+router.use(authMiddleware);
+
+router.get("/", (req, res) => {
+    return ProdutoController.renderHome(req, res);
+});
+
 router.get('/clientes/visualizar', ClienteController.renderAll);
 router.get('/clientes/:id/atualizar', ClienteController.renderUpdate);
 router.get('/clientes/:id/excluir', ClienteController.renderDeleteConfirmation);
 router.get('/clientes', ClienteController.getAll);
 router.get('/clientes/:id', ClienteController.getById);
-router.post('/clientes', uploadPerfil, ClienteController.create);
 router.post('/clientes/:id/atualizar', uploadPerfil, ClienteController.update);
 router.post('/clientes/:id/excluir', ClienteController.delete);
 router.patch('/clientes/:id', uploadPerfil, ClienteController.update);

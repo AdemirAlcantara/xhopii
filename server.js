@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import { staticMiddleware, urlencodedMiddleware, jsonMiddleware, securityMiddleware, compressionMiddleware } from './middlewares/middlewares.js';
 import { __dirname, assetsPath, viewsPath } from './utils/pathUtils.js';
 import router from './routes/router.js';
@@ -15,6 +16,7 @@ app.set('views', viewsPath);
 app.use(securityMiddleware);
 app.use(compressionMiddleware);
 app.use(staticMiddleware);
+app.use(cookieParser());
 app.use(urlencodedMiddleware);
 app.use(jsonMiddleware);
 

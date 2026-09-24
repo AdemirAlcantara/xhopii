@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Recuperação de senha</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <main class="pagina-confirmacao">
+        <section class="confirmacao-box">
+            <h1>Recuperação de senha</h1>
+            <p>Se o e-mail estiver cadastrado, um link de recuperação será disponibilizado.</p>
+            <% if (typeof link !== 'undefined' && link) { %>
+                <p><strong>Simulação local:</strong> use o link abaixo para definir uma nova senha.</p>
+                <a class="link-acao" href="<%= link %>">Abrir redefinição de senha</a>
+            <% } %>
+            <a class="link-acao link-cancelar" href="/login">Voltar ao login</a>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Xhopii - Nova senha</title>
+</head>
+<body>
+    <%- include('partials/cabecalho') %>
+    <main class="pagina-formulario">
+        <section class="formulario-pagina">
+            <h1>Definir nova senha</h1>
+            <% if (erro) { %><p class="compra-erro"><%= erro %></p><% } %>
+            <form method="POST" action="/recuperar-senha/<%= token %>">
+                <input type="password" name="senha" placeholder="Nova senha" required>
+                <input type="password" name="confirmarSenha" placeholder="Confirmar nova senha" required>
+                <button type="submit">Salvar nova senha</button>
+            </form>
+            <a class="link-acao link-cancelar" href="/login">Cancelar</a>
+        </section>
+    </main>
+    <%- include('partials/rodape') %>
+</body>
+</html>

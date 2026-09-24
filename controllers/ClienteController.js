@@ -66,27 +66,6 @@ class ClienteController {
         }
     }
 
-    static async login(req, res) {
-        try {
-            const email = req.body.email || req.body.inputEmailLog;
-            const senha = req.body.senha || req.body.inputSenhaLog;
-
-            if (!email || !senha) {
-                return res.status(400).json({ message: 'E-mail e senha são obrigatórios' });
-            }
-
-            const cliente = await Cliente.findByEmail(email);
-            if (!cliente || cliente.senha !== senha) {
-                return res.status(401).json({ message: 'E-mail ou senha inválidos' });
-            }
-
-            return res.redirect('/');
-        } catch (error) {
-            console.error('Erro ao realizar login:', error);
-            return res.status(500).json({ message: 'Erro interno ao realizar login' });
-        }
-    }
-
     static async recoverPassword(req, res) {
         try {
             const email = req.body.email || req.body.inputEmailLog;

@@ -1,4 +1,5 @@
 import ClienteModel from './ClienteSchema.js';
+import { hashPassword } from '../utils/passwordUtils.js';
 
 class Cliente {
     
@@ -21,7 +22,7 @@ class Cliente {
             dataNascimento: this.dataNascimento,
             telefone: this.telefone,
             email: this.email,
-            senha: this.senha,
+            senha: await hashPassword(this.senha),
             imagem: this.imagem
         });
 
@@ -41,6 +42,10 @@ class Cliente {
     }
 
     static async update(id, dadosAtualizados) {
+        if (dadosAtualizados.senha) {
+            dadosAtualizados.senha = await hashPassword(dadosAtualizados.senha);
+        }
+
         return await ClienteModel.findByIdAndUpdate(
             id,
             dadosAtualizados,

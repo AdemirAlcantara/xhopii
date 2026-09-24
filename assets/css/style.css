@@ -284,35 +284,53 @@ body{
 .conteudo-login .conteudo-login-info .form-login{
     width: 100%;
     height: 300px;
+    box-sizing: border-box;
+    padding: 1.5rem 0;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 1rem;
     margin-top: 1.5em;
     border-radius: 1px;
 }
 
-#label-log{
-    color: rgb(34,34,34);
-    font-size: 1.25rem;
+.conteudo-login .form-login #label-log{
+    margin-bottom: .5rem;
+    color: rgb(251,86,48);
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-#input-log{
+.conteudo-login .form-login #input-log{
+    box-sizing: border-box;
     border-color: rgba(0,0,0,.09);
     color: rgb(0, 0, 0);
     width: 75%;
-    padding-left: 5%;
+    height: 42px;
+    margin: 0;
+    padding: 0 .9rem;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 2px;
 }
 
-#input-log :hover{
+.conteudo-login .form-login #input-log:hover,
+.conteudo-login .form-login #input-log:focus{
     border-color: rgb(0, 0, 0);
+    outline: none;
 }
 
-#botao-log{
+.conteudo-login .form-login #botao-log{
     background-color: rgb(251,86,48);
     color: rgb(255, 255, 255);
     font-size: 15px;
     width: 80%;
+    height: 42px;
+    margin-top: .5rem;
+    border: 0;
+    border-radius: 2px;
     text-transform: uppercase;
     cursor: pointer;
 }
